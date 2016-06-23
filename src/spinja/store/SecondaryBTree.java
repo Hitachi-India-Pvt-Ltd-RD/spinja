@@ -24,8 +24,8 @@ import java.util.*;
 public class SecondaryBTree extends StateStore {
 	int totalStoredState = 0;
 	BTree bt = new BTree(33);
-
-	HashSet <String> hs = new HashSet<String>();
+	private int capacity = 16;
+	HashSet <String> hs = new HashSet<String>(capacity);
 
 	public String byteToString(byte[] b)
 	{
@@ -36,14 +36,20 @@ public class SecondaryBTree extends StateStore {
 		return res;
 	}
 
-
-	//@return The number of bytes of internal memory that is used by this StateStore.
-	// @Override
+	/**
+	 * Tries to add the given state to the store. When a state that is equal to the current one was
+	 * already stored, false is returned. Otherwise true should be returned.
+	 * 
+	 * @param state
+	 *            The state that should be added to this state.
+	 * @return True when the state was added or false when it was already stored.
+	 */
+	
 	public int addState(final byte[] state) {
 
 		String st = byteToString(state);
 		if (hs.contains(st)) {
-			return -1;
+			return 0;
 		}
 		else
 		{
@@ -61,11 +67,11 @@ public class SecondaryBTree extends StateStore {
 				{
 					bt.insert(state);
 					totalStoredState++;
-					return state.length;
+					return 1;
 				}
 				else
 				{
-					return -1;
+					return 0;
 				}					
 
 			}
@@ -73,19 +79,22 @@ public class SecondaryBTree extends StateStore {
 			{
 				hs.add(st);
 				totalStoredState++;
-				return state.length;
+				return 1;
 			}	
 
 		}
 	}
 //=============================================================================================================
 
-	//@return The number of collisions that have occurred while storing the states.
-	//NOT APPLICABLE IN THIS CASE
-	// ZERO Collisions
+	/**
+	 * Returns the number of bytes of internal memory that is used by this StateStore. This may is
+	 * an (optimistic) estimation, because of the way Java handles memory and garbage collection.
+	 * 
+	 * @return The number of bytes of internal memory that is used by this StateStore.
+	 */
 	@Override
 	public long getBytes() {
-		return  0;
+		return  32*hs.size() + 4*capacity;
 	}
 
 
