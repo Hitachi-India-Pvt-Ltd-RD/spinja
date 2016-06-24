@@ -49,7 +49,7 @@ public class SecondaryBTree extends StateStore {
 
 		String st = byteToString(state);
 		if (hs.contains(st)) {
-			return 0;
+			return -1;
 		}
 		else
 		{
@@ -71,7 +71,7 @@ public class SecondaryBTree extends StateStore {
 				}
 				else
 				{
-					return 0;
+					return -1;
 				}					
 
 			}
