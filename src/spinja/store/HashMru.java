@@ -31,12 +31,9 @@ public class HashMru extends StateStore {
         head = null;
         tail = null;
         hs = new HashSet();
-        wrapper = new JDBCWrapper("localhost", 7777, "test", "spinja");
+        wrapper = new JDBCWrapper("localhost", 27017, "test", "spinja");
         totalStoredState = 0;
         to_swap = 0;
-        Runtime inst = Runtime.getRuntime();
-        max_mem = inst.maxMemory();
-        System.err.println("Max Memory used: "+max_mem/(1024*1024));
         hash_hits = 0;
         disk_hits = 0;
         disk_inserts = 0;
@@ -62,9 +59,6 @@ public class HashMru extends StateStore {
             
             if (max_mem - mem_used <= 260 * mb) {
                 to_swap = 1;
-                System.err.println("Free Memory available is " + (max_mem - mem_used) + " less than 480 MB");
-                System.err.println("Memory Used is "+mem_used/mb);
-                System.err.println("So Will Start to Swap Out Now");
             }
         }
         if (totalStoredState == 0) {
@@ -118,15 +112,8 @@ public class HashMru extends StateStore {
     }
 
     public void printSummary() {
-        System.err.println("----------------------Summary Report--------------------------------\n");
-        System.err.println("-------------Mixed MRU-Hashset and Mongodb Implementation --------------------------------\n");
-        System.err.println("Number of Hashset Hits: " + hash_hits);
-        System.err.println("Number of Disk Hits: " + disk_hits);
-        System.err.println("Number of Disk Inserts: " + disk_inserts);
-        System.err.println("Number of Disk Searches: " + disk_searches);
-        Runtime inst = Runtime.getRuntime();
-        long mem_used = inst.totalMemory() - inst.freeMemory();
-        System.err.println("Total Memory Used: " + mem_used);
+        System.out.println("----------------------Summary Report--------------------------------\n");
+        System.out.println("-------------Mixed MRU-Hashset and Mongodb Implementation --------------------------------\n");
         wrapper.close();
     }
 
