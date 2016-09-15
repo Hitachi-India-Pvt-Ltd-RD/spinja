@@ -44,6 +44,7 @@ import spinja.store.HashTable;
 import spinja.store.ProbingHashTable;
 import spinja.store.SecondaryBTree;
 import spinja.store.StateStore;
+import spinja.store.HashMru;
 
 public class Run extends Thread {
 
@@ -57,7 +58,7 @@ public class Run extends Thread {
 		'D',
 		"use a specific implementation option",
 		new String[] {
-				"BFS", "NOREDUCE", "BITSTATE", "HC", "ARRAY", "GTRAIL", "GUSER", "GRANDOM", "SECONDARYBTREE"
+				"BFS", "NOREDUCE", "BITSTATE", "HC", "ARRAY", "GTRAIL", "GUSER", "GRANDOM", "SECONDARYBTREE","HASHMONGO"
 		},
 		new String[] {
 				"uses a Breadth First Search algorithm",
@@ -71,7 +72,8 @@ public class Run extends Thread {
 				"uses the trail-file to guide the search", 
 				"uses user input to guide the search",
 				"uses a randomizer to guide the search",
-				"uses BTree and stores on secondary drive"
+				"uses BTree and stores on secondary drive",
+       				"Uses Hashset Overlayed with MRU and MongoDB"
 		});
 
 	private final BooleanOption checkAccept = new BooleanOption('a',
@@ -264,6 +266,8 @@ public class Run extends Thread {
 				store = new HashTable(hashEntries.getValue());
 			} else if (impl.isSet("SECONDARYBTREE")) {
 				store = new SecondaryBTree();
+			} else if(impl.isSet("HASHMONGO")){
+				store = new HashMru();
 			} else {
 				store = new ProbingHashTable(hashEntries.getValue());
 			}

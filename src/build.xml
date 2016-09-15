@@ -27,7 +27,7 @@
 
 	<target name="compile" description="Compiles all java files" depends="javacc">
 		<javac destdir="${build}/classes"  source="1.7" debug="on" debuglevel="lines,vars,source" srcdir="${spinja}" includeantruntime="false">
-			  <compilerarg line="-XDignore.symbol.file" />	
+			  <compilerarg line="-XDignore.symbol.file -cp ../lib/mongo-java-driver-3.2.2.jar:." />	
 		</javac>
 	</target>
 
