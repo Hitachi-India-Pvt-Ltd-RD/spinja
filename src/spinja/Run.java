@@ -42,6 +42,7 @@ import spinja.store.BitstateHashStore;
 import spinja.store.HashCompactStore;
 import spinja.store.HashTable;
 import spinja.store.ProbingHashTable;
+import spinja.store.SecondaryBTree;
 import spinja.store.StateStore;
 
 public class Run extends Thread {
@@ -56,7 +57,7 @@ public class Run extends Thread {
 		'D',
 		"use a specific implementation option",
 		new String[] {
-				"BFS", "NOREDUCE", "BITSTATE", "HC", "ARRAY", "GTRAIL", "GUSER", "GRANDOM"
+				"BFS", "NOREDUCE", "BITSTATE", "HC", "ARRAY", "GTRAIL", "GUSER", "GRANDOM", "SECONDARYBTREE"
 		},
 		new String[] {
 				"uses a Breadth First Search algorithm",
@@ -70,6 +71,7 @@ public class Run extends Thread {
 				"uses the trail-file to guide the search", 
 				"uses user input to guide the search",
 				"uses a randomizer to guide the search",
+				"uses BTree and stores on secondary drive"
 		});
 
 	private final BooleanOption checkAccept = new BooleanOption('a',
@@ -260,6 +262,8 @@ public class Run extends Thread {
 				store = new HashCompactStore(hashEntries.getValue(), nrBits.getValue());
 			} else if (impl.isSet("ARRAY")) {
 				store = new HashTable(hashEntries.getValue());
+			} else if (impl.isSet("SECONDARYBTREE")) {
+				store = new SecondaryBTree();
 			} else {
 				store = new ProbingHashTable(hashEntries.getValue());
 			}
